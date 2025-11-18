@@ -1,0 +1,97 @@
+const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+const wordDisplay = document.getElementById('wordDisplay');
+const phonetics = document.getElementById('phonetics');
+const definitionArea = document.getElementById('definitionArea');
+const searchInput = document.getElementById('searchInput');
+
+// --- 1. Fungsi Utama Pencarian (Online) ---
+async function searchWord() {
+    const word = searchInput.value.trim().toLowerCase();
+    definitionArea.innerHTML = '';
+    wordDisplay.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
+    phonetics.innerText = '';
+
+    if (!word) {
+        wordDisplay.innerText = "Masukkan kata dalam Bahasa Inggris!";
+        return;
+    }
+
+    try {
+        const response = await fetch(API_URL + word);
+
+        if (!response.ok) {
+            // Jika kata tidak ditemukan atau ada error API
+            wordDisplay.innerText = `Kata "${word}" tidak ditemukan.`;
+            phonetics.innerText = 'Coba kata lain.';
+            return;
+        }
+
+        const data = await response.json();
+        renderResult(data[0]);
+
+    } catch (error) {
+        wordDisplay.innerText = "Gagal terhubung ke server kamus.";
+        phonetics.innerText = 'Pastikan Anda terhubung ke internet.';
+        console.error("Fetch error:", error);
+    }
+}
+
+// --- 2. Fungsi Rendering Hasil ---
+function renderResult(data) {
+    // 2.1. Menampilkan Kata dan Fonetik
+    wordDisplay.innerHTML = `
+        ${data.word} 
+        <button class="speak-button" onclick="speakWord('${data.word}', 'en-US')">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    `;
+
+    // Ambil fonetik yang tersedia (teks atau audio)
+    let phoneticText = data.phonetic || (data.phonetics.find(p => p.text)?.text) || '';
+    phonetics.innerText = phoneticText;
+
+    // 2.2. Menampilkan Definisi per Bagian Ucapan
+    definitionArea.innerHTML = '';
+    
+    data.meanings.forEach(meaning => {
+        const section = document.createElement('div');
+        section.className = 'meaning-section';
+        
+        // Bagian Ucapan (Noun, Verb, Adjective, dll.)
+        const partOfSpeech = document.createElement('h3');
+        partOfSpeech.innerText = meaning.partOfSpeech.charAt(0).toUpperCase() + meaning.partOfSpeech.slice(1);
+        section.appendChild(partOfSpeech);
+
+        // Definisi Pertama (Ambil hanya 1-2 definisi untuk keringkasan)
+        meaning.definitions.slice(0, 2).forEach((def, index) => {
+            const defText = document.createElement('p');
+            defText.innerHTML = `${index + 1}. ${def.definition}`;
+            section.appendChild(defText);
+        });
+
+        definitionArea.appendChild(section);
+    });
+}
+
+// --- 3. Fungsi Text-to-Speech (Meniru gTTS) ---
+function speakWord(text, lang) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang; 
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("Browser Anda tidak mendukung fitur suara.");
+    }
+}
+
+// --- 4. Event Handler untuk Tombol Enter ---
+function handleKey(event) {
+    if (event.key === 'Enter') {
+        searchWord();
+    }
+}
+
+// Inisialisasi awal
+document.addEventListener('DOMContentLoaded', () => {
+    wordDisplay.innerText = "Ketik kata dan tekan Cari!";
+});
