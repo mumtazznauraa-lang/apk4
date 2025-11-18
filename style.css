@@ -1,0 +1,121 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 500px;
+}
+
+h1 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+p {
+    color: #666;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.search-box {
+    display: flex;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+#searchInput {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.search-box button {
+    padding: 12px 25px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.search-box button:hover {
+    background-color: #218838;
+}
+
+.result-box {
+    margin-top: 25px;
+    min-height: 150px;
+}
+
+#wordDisplay {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#phonetics {
+    color: #007bff;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.meaning-section {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-left: 4px solid #ffc107;
+    background-color: #fff9e6;
+    border-radius: 4px;
+}
+
+.meaning-section h3 {
+    margin-top: 0;
+    color: #ffc107;
+    font-size: 1.1em;
+}
+
+.meaning-section p {
+    text-align: left;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 1em;
+}
+
+.footer {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px dashed #ccc;
+    text-align: center;
+}
+
+/* Tombol Suara */
+.speak-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+.speak-button:hover {
+    color: #0056b3;
+}
